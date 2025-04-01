@@ -34,6 +34,10 @@ app.use(passport.session());
 
 app.use("/api", appRoute);
 
+app.get("/",(req,res)=>{
+  res.send("Hello this is Prathap Yara")
+})
+
 const PORT=process.env.PORT || 5000;
 
 app.listen(PORT,()=>{
