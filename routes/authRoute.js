@@ -30,19 +30,18 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "/auth/google/callback",
-      proxy:true
+      callbackURL: "/api/auth/google/callback",
+      proxy: true,
     },
     async (accessToken, refreshToken, profile, done) => {
       profile.accessToken = accessToken;
       try {
         let user = await User.findOne({ googleId: profile.id });
         if (user) {
-          console.log("User already exists");
           return done(null, user);
         } else {
           const newUser = await User.create({ googleId: profile.id });
-          return done(null, newUser);
+          return done(null, newUser); 
         }
       } catch (error) {
         console.log(error);
@@ -64,8 +63,15 @@ router.get(
   OAuthCallback
 );
 
-router.get("/logout",logOutUser);
+router.get("/logout", logOutUser);
 
-
+router.get("/currentUser", async (req, res) => {
+  if (req.user) {
+    res.status(200).json({ user: req.user });
+  } else {
+    res.status(404).json({ message: "user is not found" });
+  }
+  
+});
 
 export default router;
