@@ -12,7 +12,7 @@ dotenv.config();
 const app=express();
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000"],
     credentials: true,
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     preflightContinue: false,
@@ -20,6 +20,8 @@ app.use(
 );
 
 app.use("/api/stripe/webhook", bodyParser.raw({ type: "application/json" }));
+
+//app.use("/api/survey/webhook", bodyParser.raw({ type: "application/json" }));
 
 app.use(express.json());
 app.use(
@@ -31,6 +33,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+//sendMail();
 
 app.use("/api", appRoute);
 
